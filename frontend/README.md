@@ -22,6 +22,7 @@ mongoose
 bcryptjs
 jsonwebtoken
 cookie-parser
+multer
 
 
 
