@@ -4,6 +4,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from './context/index.tsx';
 import App from './App.tsx';
 import './index.css';
+import { Toaster } from "@/components/ui/toaster"
+
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -12,5 +14,6 @@ createRoot(document.getElementById('root')!).render(
         <App />
       </AuthProvider>
     </Router>
+    <Toaster />
   </StrictMode>
 );

@@ -39,12 +39,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           setIsAuthenticated(true);
         } else {
           setIsAuthenticated(false);
-          navigate('/login');
         }
       } catch (error) {
         console.error("Token verification failed", error);
         setIsAuthenticated(false);
-        navigate("/login");
       }
     };
 

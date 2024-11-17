@@ -1,6 +1,7 @@
+import Dashboard from "@/app/dashboard/page";
 
 export default function HomePage() {
   return (
-    <div>home</div>
+    <Dashboard/>
   )
 }
