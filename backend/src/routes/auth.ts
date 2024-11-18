@@ -58,7 +58,10 @@ router.get("/validate-token", validateToken, (req: Request, res: Response) => {
 });
 
 router.post("/logout", (req: Request, res: Response) => {
-  res.cookie('auth_token', req.params.authToken);
+  res.cookie("auth_token", "", {
+    expires: new Date(0),
+  });
+  res.status(200).json({ message: "Exiting, please wait..." });
 });
 
 export default router;

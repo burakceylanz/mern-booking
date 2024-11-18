@@ -9,8 +9,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import axios from "axios";
+import * as api from "@/api";
 import { useState } from "react";
+import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 
 export function SignUpForm() {
@@ -21,36 +22,44 @@ export function SignUpForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleRegister = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    try {
-      await axios.post(
-        "http://localhost:7000/api/users/register",
-        {
-          firstName,
-          lastName,
-          email,
-          password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+  const mutation = useMutation(api.signUp, {
+    onSuccess: () => {
       toast({
-        title: "User registration successful",
-        description: "Wait for navigation to complete",
+        title:"Register success" ,
+        description: "You can now log in with your information.",
       });
-      navigate("/login");
-    } catch (error) {
+      navigate('/');
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
+      let errorMessage = "error not found"; 
+    
+      if (error.response?.data) {
+        const responseData = error.response.data;
+    
+        if (Array.isArray(responseData.message)) {
+          responseData.message.forEach((item: { msg: string }) => {
+            if (item.msg) {
+              errorMessage = item.msg;
+            }
+          });
+        }
+        else if (typeof responseData.message === 'string') {
+          errorMessage = responseData.message;
+        }
+      }
+    
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: `User already exists. ${error}`,
+        description: `Register error: ${errorMessage}`,
       });
-    }
+    },
+    
+  });
+
+  const handleRegister = () => {
+    mutation.mutate({ email, password, firstName, lastName });
   };
 
   return (

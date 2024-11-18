@@ -9,44 +9,55 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import axios from "axios";
 import { useState } from "react";
+import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
+import * as api from "@/api";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleLogin = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    try {
-      await axios.post(
-        "http://localhost:7000/api/auth/login",
-        {
-          email,
-          password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+  const mutation = useMutation(api.signIn, {
+    onSuccess: () => {
       toast({
-        title: "Login successful",
+        title:"Login success" ,
         description: "Wait for navigation to complete",
       });
-      navigate("/");
-    } catch (error) {
+      navigate('/');
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
+      let errorMessage = "error not found"; 
+    
+      if (error.response?.data) {
+        const responseData = error.response.data;
+    
+        if (Array.isArray(responseData.message)) {
+          responseData.message.forEach((item: { msg: string }) => {
+            if (item.msg) {
+              errorMessage = item.msg;
+            }
+          });
+        }
+        else if (typeof responseData.message === 'string') {
+          errorMessage = responseData.message;
+        }
+      }
+    
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: `Login error: ${error}`,
+        description: `Login error: ${errorMessage}`,
       });
-    }
+    },
+    
+  });
+
+  const handleLogin = () => {
+    mutation.mutate({ email, password });
   };
   return (
     <Card className="mx-auto max-w-sm">

@@ -54,4 +54,9 @@ router.post("/login", (0, express_validator_1.check)("email", "Email is required
 router.get("/validate-token", auth_1.default, (req, res) => {
     res.status(200).send({ userId: req.userId });
 });
+router.post("/logout", (req, res) => {
+    res.cookie("auth_token", "", {
+        expires: new Date(0),
+    });
+});
 exports.default = router;
