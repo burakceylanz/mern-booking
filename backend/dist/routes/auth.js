@@ -58,5 +58,6 @@ router.post("/logout", (req, res) => {
     res.cookie("auth_token", "", {
         expires: new Date(0),
     });
+    res.status(200).json({ message: "Exiting, please wait..." });
 });
 exports.default = router;

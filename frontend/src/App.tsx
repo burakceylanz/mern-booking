@@ -1,9 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import LoginPage from "./Page/login";
-import HomePage from "./Page/home";
+import LoginPage from "./pages/login";
+import HomePage from "./pages/home";
 import { useAuth } from "./context";
-import NotfoundPage from "./Page/not-found";
-import SignUpPage from "./Page/signup";
+import NotfoundPage from "./pages/not-found";
+import SignUpPage from "./pages/signup";
+import AddHotelPage from "./pages/add-hotel";
+import Layout from "./components/layout"; 
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -11,7 +13,10 @@ function App() {
   return (
     <Routes>
       {isAuthenticated ? (
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} /> 
+          <Route path="add-hotel" element={<AddHotelPage />} />
+        </Route>
       ) : (
         <>
           <Route path="/" element={<LoginPage />} />

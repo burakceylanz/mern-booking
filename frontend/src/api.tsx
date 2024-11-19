@@ -50,7 +50,7 @@ export const signUp = async ({
   email,
   password,
   firstName,
-  lastName
+  lastName,
 }: {
   email: string;
   password: string;
@@ -63,7 +63,7 @@ export const signUp = async ({
       email,
       password,
       firstName,
-      lastName
+      lastName,
     },
     {
       headers: {
@@ -74,6 +74,22 @@ export const signUp = async ({
   );
   if (!response) {
     throw new Error(response);
+  }
+
+  return response.data;
+};
+
+export const addHotel = async (hotelFormData: FormData) => {
+  const response = await axios.post(
+    `${API_BASE_URL}/api/my-hotels`,
+    hotelFormData, 
+    {
+      withCredentials: true,
+    }
+  );
+
+  if (!response) {
+    throw new Error("Something went wrong");
   }
 
   return response.data;
