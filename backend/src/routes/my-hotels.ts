@@ -52,7 +52,7 @@ router.post(
           throw new Error("Cloudinary upload failed");
         }
       });
-      
+
       //2. if upload was successful, add the URL to the new hotel
       const imageUrls = await Promise.all(uploadPromises);
 
@@ -74,18 +74,47 @@ router.post(
 );
 
 // /api/my-hotels/list
+router.get("/list", validateToken, async (req: Request, res: Response) => {
+  try {
+    const hotels = await Hotels.find({ userId: req.userId });
+    if (hotels.length === 0) {
+      return res
+        .status(201)
+        .json({ message: "No hotels found for this user." });
+    }
+    res.status(201).json({ hotels });
+  } catch (error) {
+    console.log("Error fetching hotels:", error);
+    res
+      .status(500)
+      .json({ message: "Something went wrong while fetching hotels." });
+  }
+});
+
+// api/my-hotels/list/:hotelId
 router.get(
-  "/list", validateToken, async (req: Request, res: Response) => {
+  "/list/:hotelId",
+  validateToken,
+  async (req: Request, res: Response) => {
     try {
-      const hotels = await Hotels.find({ userId: req.userId });
-      if (hotels.length === 0) {
-        return res.status(404).json({ message: "No hotels found for this user." });
+      const { hotelId } = req.params;
+      const hotel = await Hotels.findOne({ _id: hotelId, userId: req.userId });
+      if (!hotel) {
+        return res
+          .status(404)
+          .json({ message: "Hotel not found or you don't have access to it" });
       }
-      res.status(200).json({ hotels });
+
+      res.status(200).json({ hotel });
     } catch (error) {
       console.log("Error fetching hotels:", error);
-      res.status(500).json({ message: "Something went wrong while fetching hotels." });
+      res
+        .status(500)
+        .json({
+          message: "Something went wrong while fetching hotel details.",
+        });
     }
   }
 );
+
 export default router;

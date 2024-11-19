@@ -104,6 +104,16 @@ export const getMyHotels = async (): Promise<HotelType[]> => {
   if (!response) {
     throw new Error("Something went wrong");
   }
+  return response.data.hotels;
+};
 
-  return response.data;
+export const getMyHotelDetails = async (hotelId: string): Promise<HotelType> => {
+  const response = await axios.get(`${API_BASE_URL}/api/my-hotels/list/${hotelId}`, {
+    withCredentials: true,
+  });
+
+  if (!response) {
+    throw new Error("Something went wrong");
+  }
+  return response.data.hotel;
 };

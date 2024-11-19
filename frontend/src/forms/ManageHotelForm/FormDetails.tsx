@@ -23,9 +23,11 @@ const FormDetails = () => {
     setValue,
     formState: { errors },
   } = useFormContext<HotelFormData>();
+
+
   return (
     <section className="flex flex-1 flex-col gap-4 p-4 pt-0">
-      <div className="flex items-start gap-4">
+      <div className="flex flex-col md:flex-row items-start gap-4">
         <div className="w-full md:flex md:flex-col md:gap-4 md:w-3/4">
           <h1 className="text-foreground font-bold">Add Hotel</h1>
           <div>
@@ -63,6 +65,7 @@ const FormDetails = () => {
                 {...register("description", {
                   required: "This field is required",
                 })}
+                className="!min-h-36"
               />
               {errors.description && <span>{errors.description.message}</span>}
             </Label>

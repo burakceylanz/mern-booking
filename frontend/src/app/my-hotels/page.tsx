@@ -1,6 +1,6 @@
-import { useMutation } from "react-query";
+import { useQuery } from "react-query";
 import * as api from "@/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import Loading from "@/components/ui/loading";
 import { Button } from "@/components/ui/button";
@@ -10,13 +10,13 @@ import { Link } from "react-router-dom";
 export default function Page() {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  const [myHotels, setMyHotels] = useState([]);
-  const mutation = useMutation(api.getMyHotels, {
-    onSuccess: (response) => {
-      setMyHotels(response.hotels);
+
+
+  const { data: hotelData } = useQuery("getMyHotels", api.getMyHotels, {
+    onSuccess: () => {
       setLoading(false);
     },
-    onError: (Error) => {
+    onError: () => {
       setLoading(true);
       toast({
         variant: "destructive",
@@ -25,10 +25,6 @@ export default function Page() {
       });
     },
   });
-
-  useEffect(() => {
-    mutation.mutate();
-  }, []);
 
   if (loading) {
     return <Loading />;
@@ -41,10 +37,14 @@ export default function Page() {
           <Button>Add New Hotel</Button>
         </div>
       </div>
-      {myHotels.length > 0 ? (
-        myHotels.map((hotel) => {
+      {hotelData.length > 0 ? (
+        hotelData.map((hotel) => {
           return (
-            <Link to={`/my-hotels/${hotel._id}`} className="space-y-3 w-[250px]" key={hotel._id}>
+            <Link
+              to={`/my-hotels/${hotel._id}`}
+              className="space-y-3 w-[250px]"
+              key={hotel._id}
+            >
               <span data-state="closed">
                 <div className="overflow-hidden rounded-md relative">
                   <img

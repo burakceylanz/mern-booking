@@ -7,6 +7,7 @@ import SignUpPage from "./pages/signup";
 import AddHotelPage from "./pages/add-hotel";
 import Layout from "./components/layout"; 
 import MyHotels from "./pages/my-hotels";
+import MyHotelDetails from "./pages/my-hotel-details";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -18,6 +19,7 @@ function App() {
           <Route index element={<HomePage />} /> 
           <Route path="add-hotel" element={<AddHotelPage />} />
           <Route path="my-hotels" element={<MyHotels />} />
+          <Route path="my-hotels/:hotelId" element={<MyHotelDetails />} />
         </Route>
       ) : (
         <>

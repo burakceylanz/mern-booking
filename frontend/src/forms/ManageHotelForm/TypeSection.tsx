@@ -8,15 +8,16 @@ const TypeSection = () => {
   const {
     register,
     formState: { errors },
-    setValue, // You can use this to set the radio group value dynamically
+    setValue, 
+    watch
   } = useFormContext<HotelFormData>();
-
+  const selectedType = watch("type");
   return (
     <div>
       <h1 className="text-foreground font-bold pb-3">Type</h1>
       <RadioGroup
         onValueChange={(value) => setValue("type", value)} 
-        defaultValue=""
+        value={selectedType||''}
       >
         <div className="grid grid-cols-3 lg:grid-cols-5 gap-2">
           {hotelTypes.map((type) => (

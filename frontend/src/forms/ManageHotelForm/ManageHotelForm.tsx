@@ -1,5 +1,6 @@
 import { useForm, FormProvider } from "react-hook-form";
 import FormDetails from "./FormDetails";
+import { useEffect } from "react";
 
 export type HotelFormData = {
   name: string;
@@ -13,11 +14,16 @@ export type HotelFormData = {
   pricePerNight: number;
   starRating: number;
   imageFiles: FileList;
+  imageUrls: string[];
 };
 
-const ManageHotelForm = ({ onSave }: Props) => {
+const ManageHotelForm = ({ onSave, hotel }: Props) => {
   const formMethods = useForm<HotelFormData>();
-  const { handleSubmit } = formMethods;
+  const { handleSubmit, reset } = formMethods;
+
+  useEffect(() => {
+    reset(hotel);
+  }, [hotel, reset]);
 
   const onSubmit = handleSubmit((formData: HotelFormData) => {
     const formDataToSend = new FormData();
