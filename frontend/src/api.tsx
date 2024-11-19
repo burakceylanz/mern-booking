@@ -1,4 +1,5 @@
 import axios from "axios";
+import { HotelType } from "../../backend/src/models/hotels.ts";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -82,11 +83,23 @@ export const signUp = async ({
 export const addHotel = async (hotelFormData: FormData) => {
   const response = await axios.post(
     `${API_BASE_URL}/api/my-hotels`,
-    hotelFormData, 
+    hotelFormData,
     {
       withCredentials: true,
     }
   );
+
+  if (!response) {
+    throw new Error("Something went wrong");
+  }
+
+  return response.data;
+};
+
+export const getMyHotels = async (): Promise<HotelType[]> => {
+  const response = await axios.get(`${API_BASE_URL}/api/my-hotels/list`, {
+    withCredentials: true,
+  });
 
   if (!response) {
     throw new Error("Something went wrong");

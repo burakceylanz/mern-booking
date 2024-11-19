@@ -73,4 +73,19 @@ router.post(
   }
 );
 
+// /api/my-hotels/list
+router.get(
+  "/list", validateToken, async (req: Request, res: Response) => {
+    try {
+      const hotels = await Hotels.find({ userId: req.userId });
+      if (hotels.length === 0) {
+        return res.status(404).json({ message: "No hotels found for this user." });
+      }
+      res.status(200).json({ hotels });
+    } catch (error) {
+      console.log("Error fetching hotels:", error);
+      res.status(500).json({ message: "Something went wrong while fetching hotels." });
+    }
+  }
+);
 export default router;

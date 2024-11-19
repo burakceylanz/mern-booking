@@ -6,6 +6,7 @@ import NotfoundPage from "./pages/not-found";
 import SignUpPage from "./pages/signup";
 import AddHotelPage from "./pages/add-hotel";
 import Layout from "./components/layout"; 
+import MyHotels from "./pages/my-hotels";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} /> 
           <Route path="add-hotel" element={<AddHotelPage />} />
+          <Route path="my-hotels" element={<MyHotels />} />
         </Route>
       ) : (
         <>
