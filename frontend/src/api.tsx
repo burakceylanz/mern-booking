@@ -138,3 +138,18 @@ export const updateMyHotelById = async (hotelFormData: FormData) => {
 
   return response.data;
 };
+
+export const deleteMyHotelById = async ({ hotelId }: { hotelId: string }) => {
+  const response = await axios.delete(
+    `${API_BASE_URL}/api/my-hotels/list/${hotelId}`,
+    {
+      withCredentials: true,
+    }
+  );
+
+  if (!response) {
+    throw new Error("Failed to update Hotel");
+  }
+
+  return response.data;
+};

@@ -144,6 +144,34 @@ router.put(
   }
 );
 
+// api/my-hotels/list/:hotelId DELETE
+router.delete(
+  "/list/:hotelId",
+  validateToken,
+  async (req: Request, res: Response) => {
+    try {
+      const hotel = await Hotels.findOneAndDelete(
+        {
+          _id: req.params.hotelId,
+          userId: req.userId,
+        },
+      );
+
+      if (!hotel) {
+        return res
+          .status(404)
+          .json({ message: "Hotel not found or you don't have access to it" });
+      }
+      return res.sendStatus(200);
+    } catch (error) {
+      console.log("Error fetching hotels:", error);
+      res.status(500).json({
+        message: "Something went wrong while updating hotel details.",
+      });
+    }
+  }
+);
+
 async function uploadImages(imageFiles: Express.Multer.File[]) {
   const uploadPromises = imageFiles.map(async (image) => {
     const b64 = Buffer.from(image.buffer).toString("base64");

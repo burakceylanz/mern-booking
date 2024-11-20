@@ -5,7 +5,7 @@ import ManageHotelForm from "@/forms/ManageHotelForm/ManageHotelForm";
 import { useToast } from "@/hooks/use-toast";
 
 export default function MyHotelDetails() {
-  const {toast} = useToast();
+  const { toast } = useToast();
   const { hotelId } = useParams();
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ export default function MyHotelDetails() {
         title: "Successfully",
         description: `Hotel successfully updated`,
       });
-      navigate('/my-hotels');
+      navigate("/my-hotels");
     },
     onError: (error: Error) => {
       toast({
@@ -37,5 +37,34 @@ export default function MyHotelDetails() {
   const handleSave = (hotelFormData: FormData) => {
     mutation.mutate(hotelFormData);
   };
-  return <ManageHotelForm hotel={hotel} onSave={handleSave} isEdit={true} />;
+
+  const deleteMutation = useMutation(api.deleteMyHotelById, {
+    onSuccess: () => {
+      toast({
+        title: "Successfully",
+        description: `Hotel successfully deleted`,
+      });
+      navigate("/my-hotels");
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: `Delete Hotel error: ${error}`,
+      });
+    },
+  });
+
+  const handleDelete = (hotelId: string) => {
+    deleteMutation.mutate({ hotelId });
+  };
+
+  return (
+    <ManageHotelForm
+      hotel={hotel}
+      onSave={handleSave}
+      isEdit={true}
+      onDelete={handleDelete}
+    />
+  );
 }

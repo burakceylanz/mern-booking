@@ -14,7 +14,6 @@ import TypeSection from "./TypeSection";
 import FacilitiesSection from "./FacilitiesSection";
 import GuestsSection from "./GuestSection";
 import ImagesSection from "./ImagesSection";
-import { Button } from "@/components/ui/button";
 
 const FormDetails = () => {
   const {
@@ -23,8 +22,6 @@ const FormDetails = () => {
     setValue,
     formState: { errors },
   } = useFormContext<HotelFormData>();
-
-
   return (
     <section className="flex flex-1 flex-col gap-4 p-4 pt-0">
       <div className="flex flex-col md:flex-row items-start gap-4">
@@ -91,7 +88,9 @@ const FormDetails = () => {
                 Star Rating
                 <Select
                   value={watch("starRating")}
-                  onValueChange={(value: string) => setValue("starRating", value)}
+                  onValueChange={(value: string) =>
+                    setValue("starRating", value)
+                  }
                   {...register("starRating", {
                     required: "This field is required",
                   })}
@@ -99,7 +98,7 @@ const FormDetails = () => {
                   <SelectTrigger>
                     <SelectValue placeholder="Select Rate" />
                   </SelectTrigger>
-                  <SelectContent >
+                  <SelectContent>
                     <SelectItem value="1">1</SelectItem>
                     <SelectItem value="2">2</SelectItem>
                     <SelectItem value="3">3</SelectItem>
@@ -114,7 +113,6 @@ const FormDetails = () => {
           <TypeSection />
           <FacilitiesSection />
           <GuestsSection />
-          <Button type="submit">Save</Button>
         </div>
         <div className="w-full md:w-1/4">
           <ImagesSection />
