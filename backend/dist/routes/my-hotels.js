@@ -129,6 +129,27 @@ router.put("/list/:hotelId", auth_1.default, upload.array("imageFiles"), (req, r
         });
     }
 }));
+// api/my-hotels/list/:hotelId DELETE
+router.delete("/list/:hotelId", auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const hotel = yield hotels_1.default.findOneAndDelete({
+            _id: req.params.hotelId,
+            userId: req.userId,
+        });
+        if (!hotel) {
+            return res
+                .status(404)
+                .json({ message: "Hotel not found or you don't have access to it" });
+        }
+        return res.sendStatus(200);
+    }
+    catch (error) {
+        console.log("Error fetching hotels:", error);
+        res.status(500).json({
+            message: "Something went wrong while updating hotel details.",
+        });
+    }
+}));
 function uploadImages(imageFiles) {
     return __awaiter(this, void 0, void 0, function* () {
         const uploadPromises = imageFiles.map((image) => __awaiter(this, void 0, void 0, function* () {

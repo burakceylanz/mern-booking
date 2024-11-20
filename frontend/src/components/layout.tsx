@@ -14,6 +14,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Outlet } from "react-router-dom"
+import SearchBar from "./ui/searchbar"
 
 export default function Layout() {
   return (
@@ -39,6 +40,7 @@ export default function Layout() {
             </Breadcrumb>
           </div>
         </header>
+        <SearchBar/>
        <Outlet/>
       </SidebarInset>
     </SidebarProvider>

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { HotelType } from "../../backend/src/models/hotels.ts";
+import { HotelSearchResponse } from "../../backend/src/shared/types.ts";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -149,6 +150,38 @@ export const deleteMyHotelById = async ({ hotelId }: { hotelId: string }) => {
 
   if (!response) {
     throw new Error("Failed to update Hotel");
+  }
+
+  return response.data;
+};
+
+export type SearchParams = {
+  destination?: string;
+  checkIn?: string;
+  checkOut?: string;
+  adultCount?: string;
+  childCount?: string;
+  page?: string;
+};
+
+export const searchHotels = async (searchParams: SearchParams): Promise<HotelSearchResponse> => {
+  const queryParams = new URLSearchParams();
+  queryParams.append("destination", searchParams.destination || "");
+  queryParams.append("checkIn", searchParams.checkIn || "");
+  queryParams.append("checkOut", searchParams.checkOut || "");
+  queryParams.append("adultCount", searchParams.adultCount || "");
+  queryParams.append("childCount", searchParams.childCount || "");
+  queryParams.append("page", searchParams.page || "");
+
+  const response = await axios.get(
+    `${API_BASE_URL}/api/hotels/search?${queryParams}`,
+    {
+      withCredentials: true,
+    }
+  );
+
+  if (!response) {
+    throw new Error("Failed to searching Hotel");
   }
 
   return response.data;
