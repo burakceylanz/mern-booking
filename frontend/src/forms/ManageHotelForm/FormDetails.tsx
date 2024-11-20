@@ -114,7 +114,7 @@ const FormDetails = () => {
           <TypeSection />
           <FacilitiesSection />
           <GuestsSection />
-          <Button>Save</Button>
+          <Button type="submit">Save</Button>
         </div>
         <div className="w-full md:w-1/4">
           <ImagesSection />

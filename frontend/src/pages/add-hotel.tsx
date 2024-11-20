@@ -14,7 +14,7 @@ export default function AddHotelPage() {
         title: "Successfully",
         description: "Hotel added successfully",
       });
-      navigate("/");
+      navigate("/my-hotels");
     },
     onError: (error: Error) => {
       toast({
@@ -29,5 +29,5 @@ export default function AddHotelPage() {
     mutation.mutate(hotelFormData);
   };
 
-  return <ManageHotelForm onSave={handleSave} />;
+  return <ManageHotelForm onSave={handleSave}  isEdit={false} />;
 }

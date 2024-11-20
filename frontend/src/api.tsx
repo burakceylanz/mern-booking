@@ -107,13 +107,34 @@ export const getMyHotels = async (): Promise<HotelType[]> => {
   return response.data.hotels;
 };
 
-export const getMyHotelDetails = async (hotelId: string): Promise<HotelType> => {
-  const response = await axios.get(`${API_BASE_URL}/api/my-hotels/list/${hotelId}`, {
-    withCredentials: true,
-  });
+export const getMyHotelDetails = async (
+  hotelId: string
+): Promise<HotelType> => {
+  const response = await axios.get(
+    `${API_BASE_URL}/api/my-hotels/list/${hotelId}`,
+    {
+      withCredentials: true,
+    }
+  );
 
   if (!response) {
     throw new Error("Something went wrong");
   }
   return response.data.hotel;
+};
+
+export const updateMyHotelById = async (hotelFormData: FormData) => {
+  const response = await axios.put(
+    `${API_BASE_URL}/api/my-hotels/list/${hotelFormData.get("hotelId")}`,
+    hotelFormData,
+    {
+      withCredentials: true,
+    }
+  );
+
+  if (!response) {
+    throw new Error("Failed to update Hotel");
+  }
+
+  return response.data;
 };

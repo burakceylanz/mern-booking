@@ -1,6 +1,7 @@
 import { useForm, FormProvider } from "react-hook-form";
 import FormDetails from "./FormDetails";
 import { useEffect } from "react";
+import { HotelType } from "../../../../backend/src/models/hotels";
 
 export type HotelFormData = {
   name: string;
@@ -17,7 +18,13 @@ export type HotelFormData = {
   imageUrls: string[];
 };
 
-const ManageHotelForm = ({ onSave, hotel }: Props) => {
+type Props = {
+  hotel?: HotelType;
+  onSave: (hotelFormData: FormData) => void;
+  isEdit: boolean;
+};
+
+const ManageHotelForm = ({ onSave, hotel, isEdit }: Props) => {
   const formMethods = useForm<HotelFormData>();
   const { handleSubmit, reset } = formMethods;
 
@@ -27,6 +34,10 @@ const ManageHotelForm = ({ onSave, hotel }: Props) => {
 
   const onSubmit = handleSubmit((formData: HotelFormData) => {
     const formDataToSend = new FormData();
+
+    if (hotel && isEdit) {
+      formDataToSend.append("hotelId", hotel._id);
+    }
 
     formDataToSend.append("name", formData.name);
     formDataToSend.append("city", formData.city);
@@ -42,11 +53,19 @@ const ManageHotelForm = ({ onSave, hotel }: Props) => {
       formDataToSend.append(`facilities[${index}]`, facility);
     });
 
+    if (formData.imageUrls && formData.imageUrls.length > 0) {
+      formData.imageUrls.forEach((url, index) => {
+        formDataToSend.append(`imageUrls[${index}]`, url);
+      });
+    }
+
     Array.from(formData.imageFiles).forEach((imageFile) => {
       formDataToSend.append("imageFiles", imageFile);
     });
+
     onSave(formDataToSend);
   });
+
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={onSubmit}>
@@ -55,5 +74,6 @@ const ManageHotelForm = ({ onSave, hotel }: Props) => {
     </FormProvider>
   );
 };
+
 
 export default ManageHotelForm;
